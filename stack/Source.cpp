@@ -4,8 +4,9 @@
 
 using namespace std;
 void main() {
-	std::string str="(2+2)*2";//если не писать using namespace std;
-	string str1;// если писать using namespace std;
+	//std::string str="(2+2)*2";//если не писать using namespace std;
+	
+	//string str;// если писать using namespace std;
 	/*методы string
 	str.size();
 	str.length();
@@ -13,7 +14,7 @@ void main() {
 	
 	
 	*/
-
+	/*
 	cin >> str;
 	int size = str.length();
 	TStack<int> St(size);
@@ -41,6 +42,8 @@ void main() {
 		cout << "error";
 	}
 
+	TCalculator calc;
+	*/
 
 	/* 
 	1)
@@ -57,5 +60,18 @@ void main() {
 	//увидели открывающую положили увидели закрывающую вынули
 	//если стэк пустой то правильно иначе неправильно и неправильно если пытаемся вынуть из пустого стэка
 	*/
+
+	//-------------------------------------------------------------------------------------------------------------------------------------
+	TDStack<int> st(6);
+	st.Push1(2);
+	st.Push1(3);
+	st.Push2(4);
+	cout << st.Pop1() << " - Top one \n";
+	cout << st.Top2() << " - Top two \n";
+	cout << st.Pop2() << " - Pop two \n";
+	cout << st.Top2() << " - Top two \n";
+	
+	
+
 
 }
