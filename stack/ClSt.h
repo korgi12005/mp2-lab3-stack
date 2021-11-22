@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <string>
 
@@ -6,123 +6,122 @@ using namespace std;
 template <class T>
 class TStack {
 private:
-	int size;
-	T* pStack;
+	int Size;
+	T* stack;
 	int NumLast;
 public:
-	TStack(int _size = 10): size(_size), NumLast(-1)
+	TStack(int _Size = 10) : Size(_Size), NumLast(-1)
 	{
-		if (_size < 0)
-			throw _size;
-		pStack = new T[size];
+		if (Size < 0)
+			throw Size;
+		stack = new T[Size];
 	}
-	~TStack() {	delete[] pStack;}
-	TStack(const TStack<T> &bf)
+
+	TStack(const TStack<T>& ts) : Size(ts.Size), NumLast(ts.NumLast)
 	{
-		size = bf.size;
-		NumLast = bf.NumLast;
-		pStack = new T[size];
-		for (int i = 0; i <= NumLast; i++) {
-			pStack[i] = bf.pStack[i];
+		stack = new T[Size];
+		for (int i = 0; i <= NumLast; i++)
+		{
+			stack[i] = ts.stack[i];
 		}
 	}
-	bool Empty() const {
-		if (NumLast == -1)
-			return true;
-		else return false;
+
+	friend std::ostream& operator<< (std::ostream& ostr, const TStack& ts)
+	{
+		for (int i = 0; i <= ts.NumLast; i++)
+			ostr << ts.stack[i] << " ";
+		return ostr;
 	}
-	bool Full() const {
-		if (NumLast == size-1)
-			return true;
-		else return false;
+
+	bool Empty() const 
+	{
+		return (NumLast == -1);
 	}
-	void Clear() { NumLast = -1; }//отчистить стек
-	void Push(const T& el) {//положить
+
+	bool Full() const 
+	{
+		return (NumLast == Size - 1);
+	}
+
+	bool operator== (const TStack& ts) const
+	{
+		if (NumLast != ts.NumLast) return false;
+		for (int i = 0; i <= NumLast; i++)
+			if (stack[i] != ts.stack[i]) return false;
+		return true;
+	}
+
+	bool operator!= (const TStack& ts) const
+	{
+		return !(*this == ts);
+	}
+
+	void Clear()
+	{
+		NumLast = -1;
+	}
+
+	void Push(const T& elem)
+	{
 		if (Full())
-			throw "Full stack";
-		pStack[++NumLast] = el;
+			throw NumLast;
+		stack[++NumLast] = elem;
 	}
-	T Pop() {//взять
+
+	T& Pop()
+	{
 		if (Empty())
-			throw "Empty stack";
-		int bf = NumLast;
-		return pStack[bf];
+			throw NumLast;
+		return stack[NumLast--];
 	}
-	T Top()const {
+
+	T& Top() const
+	{
 		if (Empty())
-			throw "Empty stack";
-		int bf = NumLast-1;
-		return pStack[bf];
+			throw NumLast;
+		return stack[NumLast];
+	}
+	int TopNum() const 
+	{
+		return NumLast;
+	}
+	~TStack()
+	{
+		delete[] stack;
 	}
 };
 
-//2 + 5 * 4 = 22 - инфиксная запись
-// op1 op2 +  - посфиксная запись (операция записывается после операнда)
+//2 + 5 * 4 = 22 - РёРЅС„РёРєСЃРЅР°СЏ Р·Р°РїРёСЃСЊ
+// op1 op2 +  - РїРѕСЃС„РёРєСЃРЅР°СЏ Р·Р°РїРёСЃСЊ (РѕРїРµСЂР°С†РёСЏ Р·Р°РїРёСЃС‹РІР°РµС‚СЃСЏ РїРѕСЃР»Рµ РѕРїРµСЂР°РЅРґР°)
 // 2 + 5 * 4 - 3 = 2 5 4 * + 3 -
 // 1 / (2 + 5 * 4 - 3) = 1 2 5 4 * + 3 - /
-//складываем числа в стек доходим до операции выполняем и кладем результат обратно в стек
-//работа с арифметическими выражениями
-// 2 3 обнаружиться когда в стеке остануться числа
-// 2 3 - + обнаружиться когда в стеке не будет чисел
-/*
-class TCalculator {
-	string expr;
-	string postfix;// 2 5 4 * + 3 -
-	TStack<char> st_char;
-	TStack<double> st_double;
-public:
-	TCalculator(string _expr="1")  {
-		expr = _expr;
-		TStack<char> _st(expr.length);
-		st_char = _st;
-	}
-	double calc();
-};
-double TCalculator::calc() {
-	for (int i = 0; i < postfix.length; i++) {
-		if (postfix[i] >= '1' && postfix[i] <= '9') {
-			double tmp = stod(&postfix[i]);// функция принимает на вход строчку которую она будет конвертир string to double
-			st_double.Push(tmp);
-		}
-		if (postfix[i] == '+' || postfix[i]=='-' || postfix[i]=='*') {
-			if (st_double.Empty) {
-				throw "err";
-			}
-			double two = st_double.Pop;
-			double first=st_double.Pop;
-			switch (postfix[i])
-			{
-			case '+':
-				st_double.Push(first + two);
-				break;
-			case '-':
-				st_double.Push(first - two);
-				break;
-			case '*':
-				st_double.Push(first * two);
-				break;
-			default:
-				throw 0;
-				break;
-			}
-			
-		}
+//СЃРєР»Р°РґС‹РІР°РµРј С‡РёСЃР»Р° РІ СЃС‚РµРє РґРѕС…РѕРґРёРј РґРѕ РѕРїРµСЂР°С†РёРё РІС‹РїРѕР»РЅСЏРµРј Рё РєР»Р°РґРµРј СЂРµР·СѓР»СЊС‚Р°С‚ РѕР±СЂР°С‚РЅРѕ РІ СЃС‚РµРє
+//СЂР°Р±РѕС‚Р° СЃ Р°СЂРёС„РјРµС‚РёС‡РµСЃРєРёРјРё РІС‹СЂР°Р¶РµРЅРёСЏРјРё
+// 2 3 РѕР±РЅР°СЂСѓР¶РёС‚СЊСЃСЏ РєРѕРіРґР° РІ СЃС‚РµРєРµ РѕСЃС‚Р°РЅСѓС‚СЊСЃСЏ С‡РёСЃР»Р°
+// 2 3 - + РѕР±РЅР°СЂСѓР¶РёС‚СЊСЃСЏ РєРѕРіРґР° РІ СЃС‚РµРєРµ РЅРµ Р±СѓРґРµС‚ С‡РёСЃРµР»
 
-	}
-	if (st_double.Top >= 1)
-		throw "err";
-	return st_double.Pop();
-}
+
+/*
+Р°Р»РіРѕСЂРёС‚Рј РїРµСЂРµРІРѕРґР° РёР· РѕРґРЅРѕР№ С„РѕСЂРјС‹ РІ РґСЂСѓРіСѓСЋ
+РёСЃС…РѕРґРЅР°СЏ СЃС‚СЂРѕРєР° 2+3*4^5
+РїРѕСЃС‚С„РёРєСЃ СЃС‚СЂРѕРєР° 2 3 4 5 ^ * +
+
+
+
 */
+
+
+
+
 //-------------------------------------------------------------------------------------------------------------------------------------------------
 /*
-написать реализацию класса двойной стек 
-нужно хранить в массиве и работать сразу с 2 массивами
-создать одномер массив первый стек будет начин с начала памяти второй сразу за ним память x2
-написать простой мейн который тестирует 
-пуш в один в другой и печать всех элементов
-поп из одного из другого и печать
-оформить в виде отдельного репозитория и скинуть ссылку репозитория преподователю
+РЅР°РїРёСЃР°С‚СЊ СЂРµР°Р»РёР·Р°С†РёСЋ РєР»Р°СЃСЃР° РґРІРѕР№РЅРѕР№ СЃС‚РµРє 
+РЅСѓР¶РЅРѕ С…СЂР°РЅРёС‚СЊ РІ РјР°СЃСЃРёРІРµ Рё СЂР°Р±РѕС‚Р°С‚СЊ СЃСЂР°Р·Сѓ СЃ 2 РјР°СЃСЃРёРІР°РјРё
+СЃРѕР·РґР°С‚СЊ РѕРґРЅРѕРјРµСЂ РјР°СЃСЃРёРІ РїРµСЂРІС‹Р№ СЃС‚РµРє Р±СѓРґРµС‚ РЅР°С‡РёРЅ СЃ РЅР°С‡Р°Р»Р° РїР°РјСЏС‚Рё РІС‚РѕСЂРѕР№ СЃСЂР°Р·Сѓ Р·Р° РЅРёРј РїР°РјСЏС‚СЊ x2
+РЅР°РїРёСЃР°С‚СЊ РїСЂРѕСЃС‚РѕР№ РјРµР№РЅ РєРѕС‚РѕСЂС‹Р№ С‚РµСЃС‚РёСЂСѓРµС‚ 
+РїСѓС€ РІ РѕРґРёРЅ РІ РґСЂСѓРіРѕР№ Рё РїРµС‡Р°С‚СЊ РІСЃРµС… СЌР»РµРјРµРЅС‚РѕРІ
+РїРѕРї РёР· РѕРґРЅРѕРіРѕ РёР· РґСЂСѓРіРѕРіРѕ Рё РїРµС‡Р°С‚СЊ
+РѕС„РѕСЂРјРёС‚СЊ РІ РІРёРґРµ РѕС‚РґРµР»СЊРЅРѕРіРѕ СЂРµРїРѕР·РёС‚РѕСЂРёСЏ Рё СЃРєРёРЅСѓС‚СЊ СЃСЃС‹Р»РєСѓ СЂРµРїРѕР·РёС‚РѕСЂРёСЏ РїСЂРµРїРѕРґРѕРІР°С‚РµР»СЋ
 */
 template <class T>
 class TDStack {
@@ -168,24 +167,24 @@ public:
 		else return false;
 	}
 	
-	void Push1(const T& el) {//положить
+	void Push1(const T& el) {//РїРѕР»РѕР¶РёС‚СЊ
 		if (Full())
 			throw "Full stack";
 		mas[++NumLast1] = el;
 		NumLast2++;
 	}
-	void Push2(const T& el) {//положить
+	void Push2(const T& el) {//РїРѕР»РѕР¶РёС‚СЊ
 		if (Full())
 			throw "Full stack";
 		mas[++NumLast2] = el;
 	}
-	T Pop1() {//взять
+	T Pop1() {//РІР·СЏС‚СЊ
 		if (Empty1())
 			throw "Empty stack";
 	
 		return mas[NumLast1--];
 	}
-	T Pop2() {//взять
+	T Pop2() {//РІР·СЏС‚СЊ
 		if (Empty2())
 			throw "Empty stack";
 		return mas[NumLast2--];

@@ -1,18 +1,19 @@
 #include <iostream>
 #include <string>
 #include "ClSt.h"
+#include "Calcul.h"
 
 using namespace std;
 void main() {
 	//std::string str="(2+2)*2";//если не писать using namespace std;
-	
+
 	//string str;// если писать using namespace std;
 	/*методы string
 	str.size();
 	str.length();
 	str[0];
-	
-	
+
+
 	*/
 	/*
 	cin >> str;
@@ -27,9 +28,9 @@ void main() {
 			fl = false;
 		}
 		if (str[i] == ')' && St.Empty()==false) {
-			St.Pop();	
+			St.Pop();
 		}
-		
+
 	}
 	if (St.Empty() == 0) {
 		fl = false;
@@ -45,12 +46,12 @@ void main() {
 	TCalculator calc;
 	*/
 
-	/* 
+	/*
 	1)
 	TStack<int> st(10);
 	st.Push(5); st.Push(2);
 	//очистить стэк вытаскивая элементы пока empty не станет true
-	
+
 	2)
 
 	// (2+2)*2 записано в строке string
@@ -62,16 +63,32 @@ void main() {
 	*/
 
 	//-------------------------------------------------------------------------------------------------------------------------------------
-	TDStack<int> st(6);
-	st.Push1(2);
-	st.Push1(3);
-	st.Push2(4);
-	cout << st.Pop1() << " - Top one \n";
-	cout << st.Top2() << " - Top two \n";
-	cout << st.Pop2() << " - Pop two \n";
-	cout << st.Top2() << " - Top two \n";
-	
-	
 
+	//string tmp = "2.3+3.4";
+	//size_t ind;
+	//double dbf = stod(tmp, &ind);
+	//cout << "str=" << tmp << "\n";
+	//cout << "d=" << dbf << "\n";
+	//cout << "ind=" << ind << "\n";
 
+	TCalculator cal;
+	string ex;
+	cin >> ex;
+	cal.SetExpr(ex);//написать метод 
+	cal.ToPostfix();
+	cout << cal.GetPostfix();//написать метод и переопред cout
+	try {
+		cout << cal.CalcOne();
+	}
+	catch (int a) {
+		cout << "uncorrect expr " << a+1 << endl;
+	}
+	catch (char b) {
+		cout << "uncorrect brackate " <<  endl;
+	}
+	/*
+	для перевода строки в число мы воспользовались стандартной функцией для перевода
+	
+	*/
+	
 }
