@@ -75,7 +75,7 @@ void main() {
 	string ex;
 	cin >> ex;
 	cal.SetExpr(ex);//написать метод 
-	cal.ToPostfix();
+	
 	cout << cal.GetPostfix();//написать метод и переопред cout
 	try {
 		cout << cal.CalcOne();

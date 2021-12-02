@@ -45,7 +45,8 @@ TEST(TCalculator, correct_stepen_calculate) {
 TEST(TCalculator, correct_calculate_hard_expr) {
 	TCalculator m;
 	m.SetExpr("(2+((4*2)-6)^(4/2))/6");
-	EXPECT_EQ(1, m.CalcOne());
+	double res = (2 + ((4 * 2) - 6) ^ (4 / 2)) / 6.0;
+	EXPECT_EQ(res, m.CalcOne());
 }
 
 
